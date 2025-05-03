@@ -2,8 +2,8 @@
 app:
   name: todo-api
   image:
-    repository: sssurana90/go-todo-app
-    tag: latest
+    repository: docker.io/sssurana90/go-todo-app
+    tag: 32d499716b9c05bc878e13b08eaaabf1ab4b407e
     pullPolicy: IfNotPresent
   imagePullSecrets:
     - name: regcred
