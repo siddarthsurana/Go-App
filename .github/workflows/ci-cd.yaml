@@ -2,12 +2,11 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - '**/*.go'
+    branches: [ master ]
+
 env:
-  REGISTRY: registry.hub.docker.com
-  IMAGE_NAME: sssurana90/go-todo-app  # Update with your DockerHub username and image name
+  REGISTRY: docker.io
+  IMAGE_NAME: sssurana90/go-todo-app
   ARGOCD_SERVER: argocd.example.com
   ARGOCD_APP_NAME: todo-app
 
