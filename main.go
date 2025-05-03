@@ -29,7 +29,7 @@ func main() {
 	// Returns a greeting message
 	router.GET("/hello", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello from Todo API!",
+			"message": "Hello from Todos API!",
 		})
 	})
 
