@@ -1,0 +1,105 @@
+# Lightweight ArgoCD configuration
+global:
+  image:
+    tag: v2.9.3  # Using a stable version
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+
+# Disable unnecessary components
+dex:
+  enabled: false  # Disable Dex for lightweight setup
+notifications:
+  enabled: false  # Disable notifications
+applicationset:
+  enabled: false  # Disable ApplicationSet controller
+
+# Optimize resource requests and limits
+controller:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+server:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  # Disable unnecessary features
+  extraArgs:
+    - --insecure
+    - --disable-auth
+  # Use minimal RBAC
+  rbacConfig:
+    policy.default: role:readonly
+    policy.csv: |
+      p, role:readonly, applications, get, */*, allow
+      p, role:readonly, clusters, get, *, allow
+      p, role:readonly, repositories, get, *, allow
+      p, role:readonly, projects, get, *, allow
+
+repoServer:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+redis:
+  enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+# Disable persistence for development
+redis-ha:
+  enabled: false
+  persistence:
+    enabled: false
+
+# Use minimal HA setup
+redis-ha:
+  enabled: false
+
+# Disable metrics
+metrics:
+  enabled: false
+
+# Disable network policies
+networkPolicy:
+  enabled: false
+
+# Use minimal security settings
+configs:
+  secret:
+    createSecret: false
+  cm:
+    create: false
+    url: http://localhost:8080
+    application.instanceLabelKey: argocd.argoproj.io/instance
+    admin.enabled: "true"
+    dex.config: |
+      connectors: []
+    oidc.config: ""
+    resource.customizations: |
+      admissionregistration.k8s.io/MutatingWebhookConfiguration:
+        ignoreDifferences: |
+          jsonPointers:
+            - /webhooks/0/clientConfig/caBundle
+      admissionregistration.k8s.io/ValidatingWebhookConfiguration:
+        ignoreDifferences: |
+          jsonPointers:
+            - /webhooks/0/clientConfig/caBundle 
