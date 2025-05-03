@@ -24,6 +24,15 @@ var todos = []Todo{
 func main() {
 	router := gin.Default()
 
+	// Hello endpoint
+	// GET /hello
+	// Returns a greeting message
+	router.GET("/hello", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello from Todo API!",
+		})
+	})
+
 	// Health check endpoint
 	// GET /health
 	// Returns the status of the API server
