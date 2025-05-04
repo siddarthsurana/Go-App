@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: go-todo-app
+  description: A simple Todo API service built with Go and Gin
+  annotations:
+    github.com/project-slug: siddarthsurana/Go-App
+spec:
+  type: service
+  lifecycle: experimental
+  owner: siddarthsurana
