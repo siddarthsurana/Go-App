@@ -86,9 +86,10 @@ jobs:
       
       - name: Update Helm chart
         run: |
+          # Update the image tag in values.yaml
           SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
           sed -i "s|repository: .*|repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}|g" helm/todo-app/values.yaml
-          sed -i "s|tag: .*|tag: $SHORT_SHA|g" helm/todo-app/values.yaml
+          sed -i "s|tag: .*|tag: sha-$SHORT_SHA|g" helm/todo-app/values.yaml
 
           
           # Package the Helm chart
@@ -100,7 +101,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add helm/todo-app/values.yaml
-          git commit -m "Update image to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          git commit -m "Update image to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}"
           git push
 
   deploy-argocd:
