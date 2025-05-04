@@ -6,7 +6,7 @@ app:
     tag: 8ac7fce6c39ea02bab92e00496516d6899c9f202
     pullPolicy: IfNotPresent
   imagePullSecrets:
-    - name: regcred
+    - name: regcred1
 
 # Deployment configuration
 deployment:
