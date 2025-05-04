@@ -92,6 +92,34 @@ The API will be available at:
 - `http://todo.local:30080/todos`
 - `http://todo.local:30080/todos/1`
 
+### Backstage Integration
+
+This project is integrated with Backstage, a developer portal that provides a unified interface for managing software components. The integration includes:
+
+1. **Component Registration**
+   - The project is registered in Backstage as a software component
+   - Metadata includes repository information, ownership, and tech stack details
+
+2. **CI/CD Integration**
+   - GitHub Actions workflows are visible in Backstage
+   - Build and deployment status can be monitored
+   - ArgoCD deployment information is available
+
+3. **Documentation**
+   - API documentation is accessible through Backstage
+   - Technical specifications and architecture details are maintained
+   - Links to relevant resources and documentation
+
+4. **Dependencies**
+   - External dependencies are tracked
+   - Security vulnerabilities are monitored
+   - License compliance is maintained
+
+To view this component in Backstage:
+1. Navigate to your Backstage instance
+2. Search for "todo-api" or "go-todo-app"
+3. Access component details, CI/CD status, and documentation
+
 ### Troubleshooting
 
 If you encounter port conflicts:
