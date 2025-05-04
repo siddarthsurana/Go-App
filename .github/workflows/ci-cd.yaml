@@ -7,12 +7,13 @@ on:
 env:
   REGISTRY: docker.io
   IMAGE_NAME: sssurana90/go-todo-app
-  ARGOCD_SERVER: ${{ env.ARGOCD_SERVER || 'argocd-server.argocd.svc.cluster.local' }}
+  ARGOCD_SERVER: argocd-server.argocd
   ARGOCD_APP_NAME: todo-app
+  ARGOCD_INSECURE: "true"  # Add this for development/testing
 
 jobs:
   lint:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       
@@ -29,7 +30,7 @@ jobs:
 
   test:
     needs: lint
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       
@@ -43,7 +44,7 @@ jobs:
 
   build:
     needs: test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -79,7 +80,7 @@ jobs:
 
   update-helm:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       
