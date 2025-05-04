@@ -120,33 +120,6 @@ To view this component in Backstage:
 2. Search for "todo-api" or "go-todo-app"
 3. Access component details, CI/CD status, and documentation
 
-### Troubleshooting
-
-If you encounter port conflicts:
-1. Check if ports 30080 and 30443 are available:
-```bash
-lsof -i :30080
-lsof -i :30443
-```
-
-2. If ports are in use, you can modify the `kind-config.yaml` file to use different ports.
-
-3. To clean up and start fresh:
-```bash
-kind delete cluster --name todo-cluster
-```
-
-4. Verify the Ingress controller is running:
-```bash
-kubectl get pods -n ingress-nginx
-```
-
-5. Check Ingress status:
-```bash
-kubectl get ingress
-kubectl describe ingress todo-api-ingress
-```
-
 ## API Endpoints
 
 ### Health Check

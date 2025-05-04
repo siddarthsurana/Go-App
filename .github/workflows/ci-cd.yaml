@@ -3,6 +3,8 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'main.go'
 
 env:
   REGISTRY: docker.io
