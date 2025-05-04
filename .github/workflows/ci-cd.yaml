@@ -7,12 +7,12 @@ on:
 env:
   REGISTRY: docker.io
   IMAGE_NAME: sssurana90/go-todo-app
-  ARGOCD_SERVER: argocd.example.com
+  ARGOCD_SERVER: ${{ env.ARGOCD_SERVER || 'argocd-server.argocd.svc.cluster.local' }}
   ARGOCD_APP_NAME: todo-app
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       
@@ -29,7 +29,7 @@ jobs:
 
   test:
     needs: lint
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       
@@ -43,7 +43,7 @@ jobs:
 
   build:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -79,7 +79,7 @@ jobs:
 
   update-helm:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       
@@ -101,11 +101,35 @@ jobs:
           git commit -m "Update image to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
           git push
 
-  # Only run ArgoCD deployment if explicitly enabled
   deploy-argocd:
     needs: update-helm
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/master'
     steps:
-      - name: Skip ArgoCD deployment
-        run: echo "Skipping ArgoCD deployment in GitHub Actions" 
+      - uses: actions/checkout@v3
+      
+      - name: Install ArgoCD CLI
+        run: |
+          curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+          rm argocd-linux-amd64
+          
+      - name: Login to ArgoCD
+        run: |
+          argocd login ${{ env.ARGOCD_SERVER }} \
+            --username ${{ secrets.ARGOCD_USERNAME }} \
+            --password ${{ secrets.ARGOCD_PASSWORD }} \
+            --insecure
+          
+      - name: Sync ArgoCD Application
+        run: |
+          argocd app sync ${{ env.ARGOCD_APP_NAME }} \
+            --force \
+            --prune \
+            --timeout 300
+          
+      - name: Wait for Sync
+        run: |
+          argocd app wait ${{ env.ARGOCD_APP_NAME }} \
+            --health \
+            --timeout 300 
