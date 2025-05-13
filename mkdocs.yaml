@@ -1,0 +1,19 @@
+site_name: My Project Documentation
+repo_url: https://github.com/siddarthsurana/Go-App
+site_description: A brief description of my project.
+site_author: Siddarth Surana
+
+# Navigation structure
+nav:
+  - Home: `docs/index.md`
+  - Getting Started: `docs/getting_started.md`
+  - User Guide:
+      - Overview: `docs/user_guide/overview.md`
+      - Installation: `docs/user_guide/installation.md`
+      - Usage: user_guide/usage.md
+  - API Reference: api_reference.md
+  - About: about.md
+
+# Plugins (optional)
+plugins:
+  - techdocs-core
